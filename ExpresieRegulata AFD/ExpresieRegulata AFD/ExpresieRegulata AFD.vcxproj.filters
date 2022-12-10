@@ -18,5 +18,27 @@
     <ClCompile Include="ExpresieRegulata AFD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Finite_Automaton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Grammar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Finite_Automaton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Grammar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="automat_input.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="input.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
