@@ -24,6 +24,7 @@
     <ProjectGuid>{19cee78f-1592-4942-aa2d-48aa0231ae89}</ProjectGuid>
     <RootNamespace>ExpresieRegulataAFD</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ExprReg AFD</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
