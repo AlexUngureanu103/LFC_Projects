@@ -141,6 +141,9 @@
     <Text Include="automat_input.txt" />
     <Text Include="input.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Forma poloneza.in" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
