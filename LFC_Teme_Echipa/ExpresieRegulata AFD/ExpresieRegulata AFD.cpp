@@ -151,7 +151,7 @@ std::vector<char > CitireFormaPoloneza()
 
 	if (inp.is_open())
 	{
-		std::stack<char> OP; // de redenumit
+		std::stack<char> ordineOperatori; // de redenumit
 		std::string expresieRegulata;
 		std::getline(inp, expresieRegulata);
 		expr = expresieRegulata; // salvare de stare initiala
@@ -160,54 +160,55 @@ std::vector<char > CitireFormaPoloneza()
 		int cntAlternantaNumarSemne = 0;
 		while (!expresieRegulata.empty())
 		{
-			if (expresieRegulata[0] == ' ')
+			if (expresieRegulata[0] == ' ' || expresieRegulata[0] == '	')
 			{
 				expresieRegulata.erase(0, 1);
-			}
-			else if (expresieRegulata[0] == '.' || expresieRegulata[0] == '|' || expresieRegulata[0] == '*' || expresieRegulata[0] == '(' || expresieRegulata[0] == ')')
-			{
-				if (expresieRegulata[0] == '(')
-				{
-					OP.push(expresieRegulata[0]);
-					cntParantezeDeschise++;
-				}
-				else
-				{
-					if (expresieRegulata[0] == ')')
-					{
-						cntParantezeDeschise--;
-						if (cntParantezeDeschise < 0)
-						{
-							formaPoloneza.clear();
-							throw std::exception( "Expresia Regulata este invalida!  , prea multe paranteze )\n");
-							return formaPoloneza;
-						}
-						while (!OP.empty() && OP.top() != '(')
-						{
-							formaPoloneza.push_back(OP.top());
-							OP.pop();
-						}
-						OP.pop();
-					}
-					else // | . *
-					{
-						cntAlternantaNumarSemne--;
-						while (!OP.empty() && prec(expresieRegulata[0]) <= prec(OP.top()))
-						{
-							formaPoloneza.push_back(OP.top());
-							OP.pop();
-						}
-						OP.push(expresieRegulata[0]);
-					}
-				}
-				expresieRegulata.erase(0, 1);
-
+				continue;
 			}
 			else if (verifAlphaNum(expresieRegulata[0]))
 			{
 				cntAlternantaNumarSemne++;
 				formaPoloneza.push_back(expresieRegulata[0]);
 				expresieRegulata.erase(0, 1);
+				continue;
+			}
+			else if (expresieRegulata[0] == '(')
+			{
+				ordineOperatori.push(expresieRegulata[0]);
+				cntParantezeDeschise++;
+				cntAlternantaNumarSemne++;
+				expresieRegulata.erase(0, 1);
+				continue;
+			}
+			else if (expresieRegulata[0] == ')')
+			{
+				cntParantezeDeschise--;
+				if (cntParantezeDeschise < 0)
+				{
+					formaPoloneza.clear();
+					throw std::exception("Expresia Regulata este invalida!  , prea multe paranteze )\n");
+					return formaPoloneza;
+				}
+				while (!ordineOperatori.empty() && ordineOperatori.top() != '(')
+				{
+					formaPoloneza.push_back(ordineOperatori.top());
+					ordineOperatori.pop();
+				}
+				ordineOperatori.pop();
+				expresieRegulata.erase(0, 1);
+				continue;
+			}
+			else if (expresieRegulata[0] == '.' || expresieRegulata[0] == '|' || expresieRegulata[0] == '*')
+			{
+				cntAlternantaNumarSemne--;
+				while (!ordineOperatori.empty() && prec(expresieRegulata[0]) <= prec(ordineOperatori.top()))
+				{
+					formaPoloneza.push_back(ordineOperatori.top());
+					ordineOperatori.pop();
+				}
+				ordineOperatori.push(expresieRegulata[0]);
+				expresieRegulata.erase(0, 1);
+				continue;
 			}
 			else
 			{
@@ -215,6 +216,7 @@ std::vector<char > CitireFormaPoloneza()
 				throw std::exception("Expresia Regulata este invalida!  , caracter invalid\n");
 				return formaPoloneza;
 			}
+
 		}
 		if (cntParantezeDeschise != 0)
 		{
@@ -228,10 +230,10 @@ std::vector<char > CitireFormaPoloneza()
 			throw std::exception("Expresia Regulata este invalida!  , numar invalid de semne\n");
 			return formaPoloneza;
 		}
-		while (!OP.empty())
+		while (!ordineOperatori.empty())
 		{
-			formaPoloneza.push_back(OP.top());
-			OP.pop();
+			formaPoloneza.push_back(ordineOperatori.top());
+			ordineOperatori.pop();
 		}
 	}
 	inp.close();
@@ -239,12 +241,12 @@ std::vector<char > CitireFormaPoloneza()
 }
 int main()
 {
-	try 
+	try
 	{
 		std::vector<char> FP = CitireFormaPoloneza();
 		for (auto& c : FP)
 		{
-			std::cout << c << ' ';
+			std::cout << c;
 		}
 	}
 	catch (std::exception& e)
