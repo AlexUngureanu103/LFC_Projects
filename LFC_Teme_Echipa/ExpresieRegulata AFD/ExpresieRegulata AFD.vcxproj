@@ -129,11 +129,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AutomatLambdaTranzitii.cpp" />
     <ClCompile Include="ExpresieRegulata AFD.cpp" />
     <ClCompile Include="Finite_Automaton.cpp" />
     <ClCompile Include="Grammar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AutomatLambdaTranzitii.h" />
     <ClInclude Include="Finite_Automaton.h" />
     <ClInclude Include="Grammar.h" />
   </ItemGroup>

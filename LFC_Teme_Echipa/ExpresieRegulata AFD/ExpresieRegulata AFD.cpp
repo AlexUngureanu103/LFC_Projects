@@ -4,6 +4,8 @@
 #include <fstream>
 #include "Finite_Automaton.h"
 #include <stack>
+#include <cstdlib>
+#include "AutomatLambdaTranzitii.h"
 // Expresie Regulata ->AFD
 
 void Menu()
@@ -25,12 +27,12 @@ void Menu()
 		Finite_Automaton autom;
 		bool exit = false;
 		bool AFN_created = false;
-		int cnt = 0;
+		uint16_t cnt = 0;
 		while (!exit)
 		{
 			std::cout << "\nMenu options :\n0. Exit menu\n1.Display grammar\n2.Generate N words from grammar\n3.Generate the finite automate and display it\n4.Check if the given word is accepted by the automate\n5.Generate a word and see if it is accepted";
 
-			int choice;
+			uint16_t choice;
 			std::cout << "\nChoice : ";
 			std::cin >> choice;
 			switch (choice)
@@ -47,12 +49,12 @@ void Menu()
 			}
 			case 2:
 			{
-				int n;
+				uint16_t n;
 				std::cout << "\nNumber of new words to be generated : ";
 				std::cin >> n;
 				cnt = words.size();
-				int generations = 0;
-				for (int i = cnt; i < cnt + n; generations++)
+				uint16_t generations = 0;
+				for (uint16_t i = cnt; i < cnt + n; generations++)
 				{
 					auto word = g.generateWord();
 					if (words.find(word) == words.end())
@@ -126,7 +128,7 @@ void Menu()
 	}
 }
 
-int prec(const char& character)
+uint16_t prec(const char& character)
 {
 	if (character == '|')
 		return 1;
@@ -156,8 +158,8 @@ std::vector<char > CitireFormaPoloneza()
 		std::getline(inp, expresieRegulata);
 		expr = expresieRegulata; // salvare de stare initiala
 		expresieRegulata.push_back(' ');
-		int cntParantezeDeschise = 0;
-		int cntAlternantaNumarSemne = 0;
+		uint16_t cntParantezeDeschise = 0;
+		uint16_t cntAlternantaNumarSemne = 0;
 		while (!expresieRegulata.empty())
 		{
 			if (expresieRegulata[0] == ' ' || expresieRegulata[0] == '	')
@@ -238,7 +240,46 @@ std::vector<char > CitireFormaPoloneza()
 	inp.close();
 	return formaPoloneza;
 }
-int main()
+void transformareFormaPolonezaInAutomatLambdaTranzitii(std::vector<char>& formaPoloneza)
+{
+	uint16_t cntStari = 0;
+	const std::string q_statePattern = "q";
+	std::stack<AutomatLambdaTranzitii> SA;
+	for (uint16_t index = 0; index < formaPoloneza.size(); index++)
+	{
+		if (verifAlphaNum(formaPoloneza[index]) == true)
+		{
+			std::string q_state = q_statePattern + std::to_string(cntStari);
+			cntStari++;
+			std::string q_state2 = q_statePattern + std::to_string(cntStari);
+			cntStari++;
+			SA.push(AutomatLambdaTranzitii(q_state,formaPoloneza[index],q_state2));
+			continue;
+		}
+		else if (formaPoloneza[index] == '|')
+		{
+			AutomatLambdaTranzitii ATranzitieTop = SA.top();
+			SA.pop();
+			AutomatLambdaTranzitii BTranzitieTop = SA.top();
+			SA.pop();
+			// TO DO
+
+			continue;
+		}
+		else if (formaPoloneza[index] == '.')
+		{
+			//TO DO
+			continue;
+		}
+		else if (formaPoloneza[index] == '*')
+		{
+			//TO DO
+			continue;
+		}
+	}
+	return;
+}
+uint16_t main()
 {
 	try
 	{
@@ -247,6 +288,7 @@ int main()
 		{
 			std::cout << c;
 		}
+		transformareFormaPolonezaInAutomatLambdaTranzitii(FP);
 	}
 	catch (std::exception& e)
 	{

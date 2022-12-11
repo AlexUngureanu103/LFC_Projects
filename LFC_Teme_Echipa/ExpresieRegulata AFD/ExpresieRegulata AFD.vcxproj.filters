@@ -24,12 +24,18 @@
     <ClCompile Include="Grammar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AutomatLambdaTranzitii.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Finite_Automaton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Grammar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AutomatLambdaTranzitii.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
