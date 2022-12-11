@@ -5,10 +5,9 @@ AutomatLambdaTranzitii::AutomatLambdaTranzitii()
 }
 
 AutomatLambdaTranzitii::AutomatLambdaTranzitii(const std::string& initialState, const char& entryAlphabet, const std::string& finalState)
-	:m_initialState{initialState}
+	:m_initialState{ initialState }, m_FinState{ finalState }
 {
 	this->m_entryAlphabet.push_back(entryAlphabet);
-	this->m_FinState.push_back(finalState);
 }
 
 void AutomatLambdaTranzitii::setQ(const std::vector<std::string>& State)
@@ -26,7 +25,7 @@ void AutomatLambdaTranzitii::setInitialState(const std::string& state)
 	this->m_initialState = state;
 }
 
-void AutomatLambdaTranzitii::setFinState(const std::vector<std::string>& state)
+void AutomatLambdaTranzitii::setFinState(const std::string& state)
 {
 	this->m_FinState = state;
 }
