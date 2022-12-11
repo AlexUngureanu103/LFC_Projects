@@ -266,7 +266,7 @@ void transformareFormaPolonezaInAutomatLambdaTranzitii(std::vector<char>& formaP
 
 			continue;
 		}
-		else if (formaPoloneza[index] == '.') // TREBUIE REVIZUITA !!
+		else if (formaPoloneza[index] == '.') 
 		{
 			AutomatLambdaTranzitii BTop = SA.top();
 			SA.pop();
