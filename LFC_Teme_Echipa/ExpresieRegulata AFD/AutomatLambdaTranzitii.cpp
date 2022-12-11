@@ -69,38 +69,69 @@ std::vector<AutomatLambdaTranzitii::Transition> AutomatLambdaTranzitii::getTrans
 	return this->m_transition;
 }
 
-AutomatLambdaTranzitii ConcatenateAutomates(const AutomatLambdaTranzitii& firstAutomate, const AutomatLambdaTranzitii& secondAutomate )
+AutomatLambdaTranzitii ConcatenateAutomates(const AutomatLambdaTranzitii& firstAutomate, const AutomatLambdaTranzitii& secondAutomate)
 {
 	//TO DO ?
 	// Eliminat tanzitia cu lambda din automatul 
 	// Si facut tranformarea starii finale din primul automat in starea initiala a celui de-al doilea automat
 	// practic acele stari se unesc si devin una singura 
-	
+
 	AutomatLambdaTranzitii newAutomatLambdaTransiti;
 	std::string newInitialState = firstAutomate.getInitialState();
 	std::string newFinalState = secondAutomate.getFinState();
-	
-	AutomatLambdaTranzitii::Transition newTransition = std::make_tuple(firstAutomate.getFinState() , newAutomatLambdaTransiti.getLambda(), secondAutomate.getInitialState()); 
-	
+
+	AutomatLambdaTranzitii::Transition newTransition = std::make_tuple(firstAutomate.getFinState(), newAutomatLambdaTransiti.getLambda(), secondAutomate.getInitialState());
+
 	newAutomatLambdaTransiti.setInitialState(newInitialState); // initial state is first automate initial state
 	newAutomatLambdaTransiti.setFinState(newFinalState); // final state is second automate final state
 	std::vector<AutomatLambdaTranzitii::Transition> newTransitionVector;
-	
+
 	//states are the union of the two automates states
 	std::vector< std::string> newStates;
-	newStates = firstAutomate.getStates();
-	for (const auto& state : secondAutomate.getStates())
+	//version #1
+	//newStates = firstAutomate.getStates();
+	//for (const auto& state : secondAutomate.getStates())
+	//{
+	//	newStates.push_back(state);
+	//}
+	//newAutomatLambdaTransiti.setStates(newStates);
+
+	//version #2
+	newStates.reserve(firstAutomate.getStates().size() + secondAutomate.getStates().size() - 1);
+	for (uint16_t index = 0; index < firstAutomate.getStates().size() - 1; index++)
 	{
-		newStates.push_back(state);
+		newStates.push_back(firstAutomate.getStates()[index]);
+	}
+	std::string IntermediateState = firstAutomate.getFinState() + secondAutomate.getInitialState();
+	newStates.push_back(IntermediateState);
+	for (uint16_t index = 1; index < secondAutomate.getStates().size(); index++)
+	{
+		newStates.push_back(secondAutomate.getStates()[index]);
 	}
 	newAutomatLambdaTransiti.setStates(newStates);
-	
+
+
 	// transitions are every transition of the first automate and the second automate 
 	newTransitionVector = firstAutomate.getTransition();
-	newTransitionVector.push_back(newTransition);
+
+	//newTransitionVector.push_back(newTransition);
+
 	for (const auto& transition : secondAutomate.getTransition())
 	{
 		newTransitionVector.push_back(transition);
+	}
+
+	for (auto& transition : newTransitionVector)
+	{
+		auto& [firstState, character, secondState] = transition;
+		if (secondState == firstAutomate.getFinState())
+		{
+			secondState = IntermediateState;
+		}
+		if (firstState == secondAutomate.getInitialState())
+		{
+			firstState = IntermediateState;
+		}
 	}
 	newAutomatLambdaTransiti.setTransition(newTransitionVector);
 
