@@ -71,32 +71,14 @@ std::vector<AutomatLambdaTranzitii::Transition> AutomatLambdaTranzitii::getTrans
 
 AutomatLambdaTranzitii ConcatenateAutomates(const AutomatLambdaTranzitii& firstAutomate, const AutomatLambdaTranzitii& secondAutomate)
 {
-	//TO DO ?
-	// Eliminat tanzitia cu lambda din automatul 
-	// Si facut tranformarea starii finale din primul automat in starea initiala a celui de-al doilea automat
-	// practic acele stari se unesc si devin una singura 
-
 	AutomatLambdaTranzitii newAutomatLambdaTransiti;
 	std::string newInitialState = firstAutomate.getInitialState();
 	std::string newFinalState = secondAutomate.getFinState();
 
-	AutomatLambdaTranzitii::Transition newTransition = std::make_tuple(firstAutomate.getFinState(), newAutomatLambdaTransiti.getLambda(), secondAutomate.getInitialState());
-
 	newAutomatLambdaTransiti.setInitialState(newInitialState); // initial state is first automate initial state
 	newAutomatLambdaTransiti.setFinState(newFinalState); // final state is second automate final state
-	std::vector<AutomatLambdaTranzitii::Transition> newTransitionVector;
 
-	//states are the union of the two automates states
-	std::vector< std::string> newStates;
-	//version #1
-	//newStates = firstAutomate.getStates();
-	//for (const auto& state : secondAutomate.getStates())
-	//{
-	//	newStates.push_back(state);
-	//}
-	//newAutomatLambdaTransiti.setStates(newStates);
-
-	//version #2
+	std::vector< std::string> newStates; //states are the union of the two automates states
 	newStates.reserve(firstAutomate.getStates().size() + secondAutomate.getStates().size() - 1);
 	for (uint16_t index = 0; index < firstAutomate.getStates().size() - 1; index++)
 	{
@@ -110,17 +92,12 @@ AutomatLambdaTranzitii ConcatenateAutomates(const AutomatLambdaTranzitii& firstA
 	}
 	newAutomatLambdaTransiti.setStates(newStates);
 
-
-	// transitions are every transition of the first automate and the second automate 
+	std::vector<AutomatLambdaTranzitii::Transition> newTransitionVector; // transitions are every transition of the first automate and the second automate 
 	newTransitionVector = firstAutomate.getTransition();
-
-	//newTransitionVector.push_back(newTransition);
-
 	for (const auto& transition : secondAutomate.getTransition())
 	{
 		newTransitionVector.push_back(transition);
 	}
-
 	for (auto& transition : newTransitionVector)
 	{
 		auto& [firstState, character, secondState] = transition;
@@ -135,8 +112,7 @@ AutomatLambdaTranzitii ConcatenateAutomates(const AutomatLambdaTranzitii& firstA
 	}
 	newAutomatLambdaTransiti.setTransition(newTransitionVector);
 
-	//entry alphabet is the union of the two automates entry alphabets
-	std::vector<char> newEntryAlphabet;
+	std::vector<char> newEntryAlphabet;	//entry alphabet is the union of the two automates entry alphabets
 	newEntryAlphabet = firstAutomate.getEntryAlphabet();
 	for (const auto& entryAlphabet : secondAutomate.getEntryAlphabet())
 	{
