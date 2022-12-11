@@ -216,7 +216,6 @@ std::vector<char > CitireFormaPoloneza()
 				throw std::exception("Expresia Regulata este invalida!  , caracter invalid\n");
 				return formaPoloneza;
 			}
-
 		}
 		if (cntParantezeDeschise != 0)
 		{
