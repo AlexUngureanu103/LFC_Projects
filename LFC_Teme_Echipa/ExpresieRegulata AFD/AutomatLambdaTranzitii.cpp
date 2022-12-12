@@ -7,7 +7,7 @@ AutomatLambdaTranzitii::AutomatLambdaTranzitii()
 AutomatLambdaTranzitii::AutomatLambdaTranzitii(const std::string& initialState, const char& entryAlphabet, const std::string& finalState)
 	:m_initialState{ initialState }, m_FinState{ finalState }
 {
-	this->m_entryAlphabet.push_back(entryAlphabet);
+	this->m_entryAlphabet.insert(entryAlphabet);
 	m_transition.emplace_back(std::make_tuple(initialState, entryAlphabet, finalState));
 	m_State.push_back(initialState);
 	m_State.push_back(finalState);
@@ -28,12 +28,12 @@ std::vector<std::string> AutomatLambdaTranzitii::getStates() const
 	return this->m_State;
 }
 
-void AutomatLambdaTranzitii::setEntryAlphabet(const std::vector<char>& alphabet)
+void AutomatLambdaTranzitii::setEntryAlphabet(const std::unordered_set<char>& alphabet)
 {
 	this->m_entryAlphabet = alphabet;
 }
 
-std::vector<char> AutomatLambdaTranzitii::getEntryAlphabet() const
+std::unordered_set<char> AutomatLambdaTranzitii::getEntryAlphabet() const
 {
 	return this->m_entryAlphabet;
 }
@@ -112,11 +112,11 @@ AutomatLambdaTranzitii ConcatenateAutomates(const AutomatLambdaTranzitii& firstA
 	}
 	newAutomatLambdaTransiti.setTransition(newTransitionVector);
 
-	std::vector<char> newEntryAlphabet;	//entry alphabet is the union of the two automates entry alphabets
+	std::unordered_set<char> newEntryAlphabet;	//entry alphabet is the union of the two automates entry alphabets
 	newEntryAlphabet = firstAutomate.getEntryAlphabet();
 	for (const auto& entryAlphabet : secondAutomate.getEntryAlphabet())
 	{
-		newEntryAlphabet.push_back(entryAlphabet);
+		newEntryAlphabet.insert(entryAlphabet);
 	}
 	newAutomatLambdaTransiti.setEntryAlphabet(newEntryAlphabet);
 	return newAutomatLambdaTransiti;
@@ -208,15 +208,10 @@ AutomatLambdaTranzitii OperatorOr(const AutomatLambdaTranzitii& firstAutomate, c
 	newAutomatLambdaTransiti.setTransition(newTransitionVector);
 
 	//entry alphabet is the union of the two automates entry alphabet
-	std::vector< char> newEntryAlphabet;
-	newEntryAlphabet.reserve(firstAutomate.getEntryAlphabet().size() + secondAutomate.getEntryAlphabet().size());
-	for (const auto& entry : firstAutomate.getEntryAlphabet())
-	{
-		newEntryAlphabet.push_back(entry);
-	}
+	std::unordered_set< char> newEntryAlphabet = firstAutomate.getEntryAlphabet();
 	for (const auto& entry : secondAutomate.getEntryAlphabet())
 	{
-		newEntryAlphabet.push_back(entry);
+		newEntryAlphabet.insert(entry);
 	}
 	newAutomatLambdaTransiti.setEntryAlphabet(newEntryAlphabet);
 	
