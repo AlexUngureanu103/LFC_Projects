@@ -14,7 +14,7 @@ public:
 	using Transition = std::tuple<std::string, char, std::string>;
 	AutomatLambdaTranzitii();
 	AutomatLambdaTranzitii(const std::string& initialState, const char& entryAlphabet, const std::string& finalState);
-	char  getLambda() const ;
+	char  getLambda() const;
 	void setStates(const std::vector<std::string>& State);
 	std::vector<std::string> getStates() const;
 	void setEntryAlphabet(const std::vector<char>& alphabet);
@@ -28,5 +28,5 @@ public:
 
 };
 
-AutomatLambdaTranzitii ConcatenateAutomates(const AutomatLambdaTranzitii& firstAutomate,const  AutomatLambdaTranzitii& secondAutomate);
-
+AutomatLambdaTranzitii ConcatenateAutomates(const AutomatLambdaTranzitii& firstAutomate, const  AutomatLambdaTranzitii& secondAutomate);
+AutomatLambdaTranzitii InchidereaKleene(const AutomatLambdaTranzitii& automate, uint16_t& cntStari, const std::string& q_statePattern);

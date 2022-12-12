@@ -121,3 +121,44 @@ AutomatLambdaTranzitii ConcatenateAutomates(const AutomatLambdaTranzitii& firstA
 	newAutomatLambdaTransiti.setEntryAlphabet(newEntryAlphabet);
 	return newAutomatLambdaTransiti;
 }
+
+AutomatLambdaTranzitii InchidereaKleene(const AutomatLambdaTranzitii& automate, uint16_t& cntStari, const std::string& q_statePattern)
+{
+	AutomatLambdaTranzitii newAutomatLambdaTransiti;
+	std::string q_state = q_statePattern + std::to_string(cntStari);
+	cntStari++;
+	std::string q_state2 = q_statePattern + std::to_string(cntStari);
+	cntStari++;
+	
+	std::string newInitialState = q_state;
+	std::string newFinalState = q_state2;
+	newAutomatLambdaTransiti.setInitialState(newInitialState); // initial state is q_state
+	newAutomatLambdaTransiti.setFinState(newFinalState); // final state is q_state2
+
+	std::vector< std::string> newStates; //states are the union of the automate states and q_state and q_state2
+	newStates.reserve(automate.getStates().size() + 2);
+	newStates.push_back(q_state);
+	for (uint16_t index = 0; index < automate.getStates().size(); index++)
+	{
+		newStates.push_back(automate.getStates()[index]);
+	}
+	newStates.push_back(q_state2);
+	newAutomatLambdaTransiti.setStates(newStates);
+
+	// transitions are every transition of the automate +
+	// the lambda transitions from q_state to the initial state of the automate  , with the lambda transitions +
+	// from the final state of the automate to q_state2 ,with lambda transitions +
+	// from q_state to q_state2 , with lambda transitions +
+	// from automate final state to automate initial state , with lambda transitions
+	std::vector<AutomatLambdaTranzitii::Transition> newTransitionVector; 
+	newTransitionVector = automate.getTransition();
+	newTransitionVector.push_back({ q_state, newAutomatLambdaTransiti.getLambda(), automate.getInitialState()});
+	newTransitionVector.push_back({ automate.getFinState(), newAutomatLambdaTransiti.getLambda(), q_state2 });
+	newTransitionVector.push_back({ q_state, newAutomatLambdaTransiti.getLambda(), q_state2 });
+	newTransitionVector.push_back({ automate.getFinState(), newAutomatLambdaTransiti.getLambda(), automate.getInitialState() });
+	newAutomatLambdaTransiti.setTransition(newTransitionVector);
+	
+	newAutomatLambdaTransiti.setEntryAlphabet(automate.getEntryAlphabet());	//entry alphabet is automate entry alphabet
+
+	return newAutomatLambdaTransiti;
+}

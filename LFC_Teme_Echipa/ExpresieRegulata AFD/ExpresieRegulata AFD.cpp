@@ -253,7 +253,7 @@ void transformareFormaPolonezaInAutomatLambdaTranzitii(std::vector<char>& formaP
 			cntStari++;
 			std::string q_state2 = q_statePattern + std::to_string(cntStari);
 			cntStari++;
-			SA.push(AutomatLambdaTranzitii(q_state,formaPoloneza[index],q_state2));
+			SA.push(AutomatLambdaTranzitii(q_state, formaPoloneza[index], q_state2));
 			continue;
 		}
 		else if (formaPoloneza[index] == '|')
@@ -266,7 +266,7 @@ void transformareFormaPolonezaInAutomatLambdaTranzitii(std::vector<char>& formaP
 
 			continue;
 		}
-		else if (formaPoloneza[index] == '.') 
+		else if (formaPoloneza[index] == '.')
 		{
 			AutomatLambdaTranzitii BTop = SA.top();
 			SA.pop();
@@ -278,7 +278,10 @@ void transformareFormaPolonezaInAutomatLambdaTranzitii(std::vector<char>& formaP
 		}
 		else if (formaPoloneza[index] == '*')
 		{
-			//TO DO
+			AutomatLambdaTranzitii ATop = SA.top();
+			SA.pop();
+			AutomatLambdaTranzitii C = InchidereaKleene(ATop, cntStari, q_statePattern);
+			SA.push(C);
 			continue;
 		}
 	}
