@@ -258,12 +258,12 @@ void transformareFormaPolonezaInAutomatLambdaTranzitii(std::vector<char>& formaP
 		}
 		else if (formaPoloneza[index] == '|')
 		{
-			AutomatLambdaTranzitii ATop = SA.top();
-			SA.pop();
 			AutomatLambdaTranzitii BTop = SA.top();
 			SA.pop();
-			// TO DO
-
+			AutomatLambdaTranzitii ATop = SA.top();
+			SA.pop();
+			AutomatLambdaTranzitii C = OperatorOr(ATop, BTop, cntStari, q_statePattern);
+			SA.push(C);
 			continue;
 		}
 		else if (formaPoloneza[index] == '.')

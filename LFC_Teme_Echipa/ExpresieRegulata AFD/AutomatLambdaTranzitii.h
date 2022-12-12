@@ -30,3 +30,4 @@ public:
 
 AutomatLambdaTranzitii ConcatenateAutomates(const AutomatLambdaTranzitii& firstAutomate, const  AutomatLambdaTranzitii& secondAutomate);
 AutomatLambdaTranzitii InchidereaKleene(const AutomatLambdaTranzitii& automate, uint16_t& cntStari, const std::string& q_statePattern);
+AutomatLambdaTranzitii OperatorOr(const AutomatLambdaTranzitii& firstAutomate, const AutomatLambdaTranzitii& secondAutomate, uint16_t& cntStari, const std::string& q_statePattern);
