@@ -50,7 +50,7 @@ void findNextStates(std::string& initial, const std::vector<std::tuple<std::stri
 	}
 }
 
-Finite_Automaton fromAFNLambdaToAFD(const AutomatLambdaTranzitii& automatLambda)
+Deterministic_Finite_Automaton fromAFNLambdaToAFD(const AutomatLambdaTranzitii& automatLambda)
 {
 	using Transition = std::tuple<char, char, char>;
 	std::vector<Transition> transitionsAFD;
@@ -151,7 +151,7 @@ Finite_Automaton fromAFNLambdaToAFD(const AutomatLambdaTranzitii& automatLambda)
 		stateIndex++;
 	}
 
-	Finite_Automaton AFD;
+	Deterministic_Finite_Automaton AFD;
 	std::vector<char> AFDalphabet;
 	std::ranges::for_each(alphabetCharacters, [&AFDalphabet](const char character) {
 		AFDalphabet.push_back(character);

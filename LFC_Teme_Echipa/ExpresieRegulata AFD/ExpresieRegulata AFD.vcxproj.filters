@@ -15,13 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ExpresieRegulata AFD.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Finite_Automaton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Grammar.cpp">
+    <ClCompile Include="Deterministic_Finite_Automaton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AutomatLambdaTranzitii.cpp">
@@ -35,10 +32,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Finite_Automaton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Grammar.h">
+    <ClInclude Include="Deterministic_Finite_Automaton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AutomatLambdaTranzitii.h">

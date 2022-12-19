@@ -1,7 +1,8 @@
-#include "Finite_Automaton.h"
+#include "Deterministic_Finite_Automaton.h"
 #include <queue>
 #include <stack>
-bool Finite_Automaton::verifyAutomaton()
+
+bool Deterministic_Finite_Automaton::verifyAutomaton()
 {
 	bool is_deterministic = true;
 	if (m_State.empty() || entry_alphabet.empty())// check if those are not NULL
@@ -78,33 +79,38 @@ bool Finite_Automaton::verifyAutomaton()
 	return true;
 }
 
-void Finite_Automaton::setQ(const std::vector<char>& State)
+void Deterministic_Finite_Automaton::setQ(const std::vector<char>& State)
 {
 	this->m_State = State;
 }
 
-void Finite_Automaton::setEntryAlphabet(const std::vector<char>& alphabet)
+void Deterministic_Finite_Automaton::setEntryAlphabet(const std::vector<char>& alphabet)
 {
 	this->entry_alphabet = alphabet;
 }
 
-void Finite_Automaton::setInitialState(const char& state)
+void Deterministic_Finite_Automaton::setInitialState(const char& state)
 {
 	this->initial_state = state;
 }
 
-void Finite_Automaton::setFinState(const std::vector<char>& state)
+void Deterministic_Finite_Automaton::setFinState(const std::vector<char>& state)
 {
 	this->Fin_state = state;
 }
 
-void Finite_Automaton::setTransition(const std::vector<std::tuple<char, char, char>>& transition)
+void Deterministic_Finite_Automaton::setTransition(const std::vector<std::tuple<char, char, char>>& transition)
 {
 	this->transition = transition;
 }
 
-bool Finite_Automaton::checkWord(std::string word)
+bool Deterministic_Finite_Automaton::checkWord(std::string word)
 {
+	if (!isDeterministic())
+	{
+		throw std::exception {"The Automaton is not feterministic"};
+	}
+
 	char state = initial_state;
 	if (word.empty())
 	{
@@ -156,7 +162,7 @@ bool Finite_Automaton::checkWord(std::string word)
 	return false;
 }
 
-bool Finite_Automaton::isDeterministic()
+bool Deterministic_Finite_Automaton::isDeterministic()
 {
 	if (this->verifyAutomaton())// it can be deterministic only if it's a verified automate
 	{
@@ -182,8 +188,13 @@ bool Finite_Automaton::isDeterministic()
 	return false;
 }
 
-std::ostream& operator<<(std::ostream& out, const Finite_Automaton& automat)
+std::ostream& operator<<(std::ostream& out, Deterministic_Finite_Automaton& automat)
 {
+	if (!automat.isDeterministic())
+	{
+		throw std::exception{ "The Automaton is not deterministic" };
+	}
+
 	out << "\nFinite Automat :\n" << "M = ({";
 	for (int i = 0; i < automat.m_State.size(); i++)
 	{

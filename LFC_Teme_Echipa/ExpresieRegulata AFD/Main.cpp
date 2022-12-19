@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Finite_Automaton.h"
+#include "Deterministic_Finite_Automaton.h"
 #include "FormaPoloneza.h"
 #include "AFN_lambdaToAFD.h"
 // Expresie Regulata ->AFD
@@ -30,7 +30,7 @@ void Meniu()
 
 	std::vector<char> FP = CitireFormaPoloneza(expresieRegulata);
 	AutomatLambdaTranzitii AFNlambda = transformareFormaPolonezaInAutomatLambdaTranzitii(FP);
-	Finite_Automaton M = fromAFNLambdaToAFD(AFNlambda);
+	Deterministic_Finite_Automaton M = fromAFNLambdaToAFD(AFNlambda);
 
 	char opt;
 	int n;

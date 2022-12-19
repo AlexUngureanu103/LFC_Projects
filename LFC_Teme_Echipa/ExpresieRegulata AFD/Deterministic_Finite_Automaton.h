@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-class Finite_Automaton
+class Deterministic_Finite_Automaton
 {
 	std::vector< char>m_State;
 	std::vector<char> entry_alphabet;
@@ -17,9 +17,9 @@ public:
 	void setInitialState(const char& state);
 	void setFinState(const std::vector<char>& state);
 	void setTransition(const std::vector<std::tuple<char, char, char>>& transition);
-	friend std::ostream& operator <<(std::ostream& out, const  Finite_Automaton& automat);
+	friend std::ostream& operator <<(std::ostream& out, Deterministic_Finite_Automaton& automat);
 	bool checkWord(std::string word);
 	bool isDeterministic();
-	~Finite_Automaton() = default;
+	~Deterministic_Finite_Automaton() = default;
 };
 
