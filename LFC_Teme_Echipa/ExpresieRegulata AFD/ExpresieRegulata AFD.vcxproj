@@ -129,22 +129,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AFN_lambdaToAFD.cpp" />
     <ClCompile Include="AutomatLambdaTranzitii.cpp" />
     <ClCompile Include="ExpresieRegulata AFD.cpp" />
     <ClCompile Include="Finite_Automaton.cpp" />
+    <ClCompile Include="FormaPoloneza.cpp" />
     <ClCompile Include="Grammar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AFN_lambdaToAFD.h" />
     <ClInclude Include="AutomatLambdaTranzitii.h" />
     <ClInclude Include="Finite_Automaton.h" />
+    <ClInclude Include="FormaPoloneza.h" />
     <ClInclude Include="Grammar.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="automat_input.txt" />
     <Text Include="input.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Forma poloneza.in" />
+    <Text Include="FormaPoloneza.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
