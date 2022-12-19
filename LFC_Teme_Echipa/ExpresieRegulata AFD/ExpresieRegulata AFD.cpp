@@ -8,125 +8,6 @@
 #include "AutomatLambdaTranzitii.h"
 // Expresie Regulata ->AFD
 
-void Menu()
-{
-	Grammar g;
-	std::ifstream inp{ "input.txt" };
-	if (inp.is_open())
-	{
-		inp >> g;
-	}
-	else {
-		std::cout << "\nFine not found !\n";
-	}
-	inp.close();
-	std::cout << "Check grammar : " << g.checkGrammar() << "\nRegular grammar : " << g.isRegular();
-	if (g.isRegular() == true)
-	{
-		std::unordered_set<std::string> words;
-		Finite_Automaton autom;
-		bool exit = false;
-		bool AFN_created = false;
-		uint16_t cnt = 0;
-		while (!exit)
-		{
-			std::cout << "\nMenu options :\n0. Exit menu\n1.Display grammar\n2.Generate N words from grammar\n3.Generate the finite automate and display it\n4.Check if the given word is accepted by the automate\n5.Generate a word and see if it is accepted";
-
-			uint16_t choice;
-			std::cout << "\nChoice : ";
-			std::cin >> choice;
-			switch (choice)
-			{
-			case 0:
-			{
-				exit = true;
-				break;
-			}
-			case 1:
-			{
-				std::cout << g;
-				break;
-			}
-			case 2:
-			{
-				uint16_t n;
-				std::cout << "\nNumber of new words to be generated : ";
-				std::cin >> n;
-				cnt = words.size();
-				uint16_t generations = 0;
-				for (uint16_t i = cnt; i < cnt + n; generations++)
-				{
-					auto word = g.generateWord();
-					if (words.find(word) == words.end())
-					{
-						words.insert(word);
-						i++;
-					}
-					if (generations > n + 500)
-					{
-						std::cout << "\nNo new word was  generated in 500+ tries\n";
-						break;
-					}
-				}
-				break;
-			}
-			case 3:
-			{
-				if (AFN_created == false)
-				{
-					autom = g.createAFN();
-					std::cout << "\nVerify Automate : " << autom.verifyAutomaton();
-					std::cout << "\nIs Deterministic : " << autom.isDeterministic();
-					AFN_created = true;
-				}
-				std::cout << autom;
-				break;
-			}
-			case 4:
-			{
-				if (AFN_created == true)
-				{
-					std::cout << "\nWord to be checked : ";
-					std::string word;
-					std::cin >> word;
-					if (autom.checkWord(word))
-					{
-						std::cout << "\nThe word is valid";
-					}
-					else std::cout << "\nInvalid word";
-				}
-				else std::cout << "\nThe automate is not defined yet";
-				break;
-			}
-			case 5:
-			{
-				if (AFN_created == true)
-				{
-					if (autom.checkWord(g.generateWord()))
-					{
-						std::cout << "\nThe word is valid";
-					}
-					else std::cout << "\nInvalid word";
-				}
-				else std::cout << "\nThe automate is not defined yet";
-
-				break;
-			}
-			case 6:
-			{
-				std::cout << "\nGenerated words : " << words.size() << '\n';
-				for (const auto& w : words)
-				{
-					std::cout << w << ' ';
-				}
-				break;
-			}
-			default:
-				break;
-			}
-		}
-	}
-}
 
 uint16_t prec(const char& character)
 {
@@ -147,7 +28,7 @@ bool verifAlphaNum(const char& character)
 }
 std::vector<char > CitireFormaPoloneza()
 {
-	std::ifstream inp{ "Forma poloneza.in" };
+	std::ifstream inp{ "FormaPoloneza.txt" };
 	std::string expr;
 	std::vector<char> formaPoloneza;
 
@@ -240,7 +121,8 @@ std::vector<char > CitireFormaPoloneza()
 	inp.close();
 	return formaPoloneza;
 }
-void transformareFormaPolonezaInAutomatLambdaTranzitii(std::vector<char>& formaPoloneza)
+
+AutomatLambdaTranzitii transformareFormaPolonezaInAutomatLambdaTranzitii(std::vector<char>& formaPoloneza)
 {
 	uint16_t cntStari = 0;
 	const std::string q_statePattern = "q";
@@ -285,8 +167,174 @@ void transformareFormaPolonezaInAutomatLambdaTranzitii(std::vector<char>& formaP
 			continue;
 		}
 	}
-	return;
+	return SA.top();
 }
+
+void findNextStates(std::string& initial, const std::vector<std::tuple<std::string, char, std::string>>& transitionsLambda, const char alphabetCharacter)
+{
+	std::stack<std::string> states;
+	states.push(initial);
+	std::string firstState;
+	if (alphabetCharacter != '#')
+	{
+		initial.clear();
+
+	}
+
+	while (!states.empty())
+	{
+		firstState = states.top();
+		states.pop();
+		std::ranges::for_each(transitionsLambda, 
+			[&states, &alphabetCharacter, &initial, &firstState]
+		(const std::tuple<std::string, char, std::string>& transition) {
+				auto& [currState, character, nextState] = transition;
+				std::string aux;
+				for (uint16_t i = 0; i < firstState.size(); i++)
+				{
+					while (i < firstState.size() && firstState[i] != ',')
+					{
+						aux.push_back(firstState[i]);
+						i++;
+					}
+
+					if (currState == aux && character == alphabetCharacter)
+					{
+						if (initial.find(nextState) == initial.npos)
+						{
+							if(alphabetCharacter == '#')
+							{
+								states.push(nextState);
+							}
+							if (!initial.empty())
+							{
+								initial += ',';
+							}
+							initial += nextState;
+						}
+
+					}
+					aux.clear();
+				}
+			});
+	}
+}
+
+Finite_Automaton fromAFNLambdaToAFD(const AutomatLambdaTranzitii& automatLambda)
+{
+	using Transition = std::tuple<char, char, char>;
+	std::vector<Transition> transitionsAFD;
+	std::vector< std::string> statesBeforeLambda;
+	std::vector< char> AFDStates, finalStates;
+	std::string initial, current, aux, aux2;
+
+	const auto& transitionsLambdaAFN = automatLambda.getTransition();
+	const auto& states = automatLambda.getStates();
+	const auto& alphabetCharacters = automatLambda.getEntryAlphabet();
+	const auto& finalStatesAFN = automatLambda.getFinState();
+
+	bool ok;
+	uint16_t stateIndex = 0;
+	char stateSymbol = 'A';
+
+	initial = automatLambda.getInitialState();
+	statesBeforeLambda.push_back(initial);
+	std::stack<std::string> unexploredStates;
+	findNextStates(initial, transitionsLambdaAFN, '#');
+	AFDStates.push_back(stateSymbol);
+	stateSymbol++;
+	unexploredStates.push(initial);
+
+	while (!unexploredStates.empty())
+	{
+		initial = unexploredStates.top();
+		unexploredStates.pop();
+
+		for (const auto& alphabetChar : alphabetCharacters)
+		{
+			current = initial;
+			findNextStates(current, transitionsLambdaAFN, alphabetChar);
+			if (!current.empty())
+			{
+				ok = true;
+				for (uint16_t i = 0; i < statesBeforeLambda.size(); i++)
+				{
+					if (i != stateIndex && current == statesBeforeLambda[i])
+					{
+						transitionsAFD.push_back(Transition(AFDStates[stateIndex], alphabetChar, AFDStates[i]));
+						ok = false;
+						break;
+					}
+				}
+				if (ok)
+				{
+					statesBeforeLambda.push_back(current);
+					findNextStates(current, transitionsLambdaAFN, '#');
+					unexploredStates.push(current);
+
+					aux.clear();
+					aux2.clear();
+					for (uint16_t i = 0; i < current.size(); i++)
+					{
+						while (i < current.size() && current[i] != ',')
+						{
+							aux.push_back(current[i]);
+							i++;
+						}
+
+						for (uint16_t i = 0; i < finalStatesAFN.size(); i++)
+						{
+							while (!isdigit(finalStatesAFN[i]))
+							{
+								aux2.push_back(finalStatesAFN[i]);
+								i++;
+							}
+							while (isdigit(finalStatesAFN[i]))
+							{
+								aux2.push_back(finalStatesAFN[i]);
+								i++;
+							}
+							if (aux == aux2)
+							{
+								break;
+							}
+							aux2.clear();
+							if (i < finalStatesAFN.size())
+							{
+								aux2.push_back(finalStatesAFN[i]);
+							}
+						}
+						if (aux == aux2)
+						{
+							finalStates.push_back(stateSymbol);
+							break;
+						}
+						aux.clear();
+					}
+
+					AFDStates.push_back(stateSymbol);
+					stateSymbol++;
+					transitionsAFD.push_back(Transition(AFDStates[stateIndex], alphabetChar, AFDStates[AFDStates.size() - 1]));
+				}
+			}
+		}
+		stateIndex++;
+	}
+
+	Finite_Automaton AFD;
+	std::vector<char> AFDalphabet;
+	std::ranges::for_each(alphabetCharacters, [&AFDalphabet](const char character) {
+		AFDalphabet.push_back(character);
+		});
+	AFD.setEntryAlphabet(AFDalphabet);
+	AFD.setFinState(finalStates);
+	AFD.setInitialState(AFDStates[0]);
+	AFD.setQ(AFDStates);
+	AFD.setTransition(transitionsAFD);
+
+	return AFD;
+}
+
 uint16_t main()
 {
 	try
@@ -296,13 +344,16 @@ uint16_t main()
 		{
 			std::cout << c;
 		}
-		transformareFormaPolonezaInAutomatLambdaTranzitii(FP);
+		AutomatLambdaTranzitii AFNlambda = transformareFormaPolonezaInAutomatLambdaTranzitii(FP);
+		Finite_Automaton AFD = fromAFNLambdaToAFD(AFNlambda);
+		AFD.checkWord("bb");
+		AFD.checkWord("aabb");
+		AFD.checkWord("bbb");
 	}
 	catch (std::exception& e)
 	{
 		std::cout << e.what();
 	}
-	//Menu();
 
 	return 0;
 }
