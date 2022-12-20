@@ -1,0 +1,10 @@
+#
+S A B 
+a b 
+S #a
+S aAa
+S bBa
+A aAB
+A a
+B bB
+B b

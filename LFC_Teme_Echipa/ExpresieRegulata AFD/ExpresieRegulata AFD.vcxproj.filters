@@ -46,12 +46,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="automat_input.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="input.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="FormaPoloneza.txt">
       <Filter>Resource Files</Filter>
     </Text>
