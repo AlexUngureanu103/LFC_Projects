@@ -336,6 +336,56 @@ Grammar::~Grammar()
 {
 }
 
+void Grammar::setStart(char start)
+{
+	this->Start = start;
+}
+
+char Grammar::getStart() const
+{
+	return Start;
+}
+
+void Grammar::setLambda(char lambda)
+{
+	this->m_lambda = lambda;
+}
+
+char Grammar::getLambda() const
+{
+	return m_lambda;
+}
+
+void Grammar::setVNonterminal(std::vector<char> vNonterminal)
+{
+	this->VNonterminal = vNonterminal;
+}
+
+std::vector<char> Grammar::getVNonterminal() const
+{
+	return this->VNonterminal;
+}
+
+void Grammar::setVTerminal(std::vector<char> vTerminal)
+{
+	this->VTerminal = vTerminal;
+}
+
+std::vector<char> Grammar::getVTerminal() const
+{
+	return VTerminal;
+}
+
+void Grammar::setProductions(std::vector<std::pair<std::string, std::string>> productions)
+{
+	this->Productions = productions;
+}
+
+std::vector<std::pair<std::string, std::string>> Grammar::getProductions() const
+{
+	return Productions;
+}
+
 std::istream& operator>>(std::istream& in, Grammar& gram)
 {
 	std::string line;
@@ -403,4 +453,11 @@ std::ostream& operator<<(std::ostream& out, const Grammar& gram)
 		out << '(' << i << ") " << P_left_member << " -> " << P_right_member << std::endl;
 	}
 	return out;
+}
+
+Grammar CreateFNG(Grammar& gram)
+{
+	Grammar FNG;
+	
+	return FNG;
 }

@@ -21,5 +21,17 @@ public:
 	bool isRegular();
 	bool isIDC();
 	~Grammar();
+
+	void setStart(char start);
+	char getStart() const;
+	void setLambda(char lambda);
+	char getLambda() const;
+	void setVNonterminal(std::vector<char> vNonterminal);
+	std::vector<char> getVNonterminal() const;
+	void setVTerminal(std::vector<char> vTerminal);
+	std::vector<char> getVTerminal() const;
+	void setProductions(std::vector<std::pair<std::string, std::string>> productions);
+	std::vector<std::pair<std::string, std::string>> getProductions() const;
 };
 
+Grammar CreateFNG(Grammar& gram);
