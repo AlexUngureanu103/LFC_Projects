@@ -12,6 +12,9 @@ private:
 	char Start;
 	char m_lambda;
 	std::vector<std::pair<std::string, std::string>> Productions;
+
+	void findAndDestroyProductions(const std::vector<char> &NewVNonterminal);
+
 public:
 	Grammar();
 	bool checkGrammar();
@@ -20,6 +23,7 @@ public:
 	friend std::ostream& operator <<(std::ostream& out, const  Grammar& gram);
 	bool isRegular();
 	bool isIDC();
+	void simplifyGrammar();
 	~Grammar();
 
 	void setStart(char start);

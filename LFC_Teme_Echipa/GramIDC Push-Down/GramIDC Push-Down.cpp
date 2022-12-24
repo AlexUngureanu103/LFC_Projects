@@ -19,6 +19,8 @@ void Menu()
 	std::cout << "Check grammar : " << g.checkGrammar() << "\nRegular grammar : " << g.isIDC();
 	if (/*g.isRegular() == */true)
 	{
+		std::cout << g;
+		g.simplifyGrammar();
 		std::unordered_set<std::string> words;
 		//Finite_Automaton autom;
 		bool exit = false;

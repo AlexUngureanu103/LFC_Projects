@@ -1,10 +1,14 @@
 #
-S A B 
-a b 
-S #a
-S aAa
-S bBa
-A aAB
-A a
-B bB
-B b
+S A B C D
+a b
+S A
+S B
+A aB
+A bS
+A b
+B BD
+B Ba
+C AS
+C b
+D bD
+D b
