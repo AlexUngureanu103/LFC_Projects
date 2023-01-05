@@ -18,18 +18,12 @@
     <ClCompile Include="GramIDC Push-Down.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FNG_Grammar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Grammar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grammar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FNG_Grammar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

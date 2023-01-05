@@ -20,7 +20,9 @@ void Menu()
 	if (/*g.isRegular() == */true)
 	{
 		std::cout << g;
+
 		g.simplifyGrammar();
+		g.transformGrammarToFNG();
 		std::unordered_set<std::string> words;
 		//Finite_Automaton autom;
 		bool exit = false;

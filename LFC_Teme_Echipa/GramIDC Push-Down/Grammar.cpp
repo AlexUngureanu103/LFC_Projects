@@ -591,6 +591,156 @@ void Grammar::simplifyGrammar()
 	VNonterminal = VNonterminalBefore;
 }
 
+void Grammar::lema1(int indexProd, int indexNonT)
+{
+	std::string left = Productions[indexProd].first;
+	std::string right = Productions[indexProd].second;
+	std::vector<std::pair<std::string, std::string>> newProductions;
+	bool modified = false;
+
+	for (const auto& [prodLeft, prodRight] : Productions)
+	{
+		if (right[0] == Start && prodRight.size() == 1 && isTerminal(prodRight[0]))
+		{
+			continue;
+		}
+
+		if (prodLeft[0] == right[indexNonT])
+		{
+			if (modified)
+			{
+				std::string aux = right;
+				const auto beginIt = aux.begin() + indexNonT;
+				aux.replace(beginIt, beginIt + 1, prodRight);
+				newProductions.push_back({ left, aux});
+			}
+			else
+			{
+				const auto beginIt = Productions[indexProd].second.begin() + indexNonT;
+				Productions[indexProd].second.replace(beginIt, beginIt + 1, prodRight);
+				modified = true;
+			}
+		}
+	}
+
+	for (auto& prod : newProductions)
+	{
+		Productions.emplace_back(prod);
+	}
+
+}
+
+void Grammar::lema2(std::vector<int> indexProd, int indexProdToTerminal)
+{
+	std::string newNonT;
+	if (VNonterminal[VNonterminal.size() - 1] < 'K')
+	{
+		newNonT = "Z";
+	}
+	else
+	{
+		newNonT = VNonterminal[VNonterminal.size() - 1] - 1;
+	}
+	VNonterminal.push_back(newNonT[0]);
+
+	for (const int index : indexProd)
+	{
+		auto& [left, right] = Productions[index];
+		left = newNonT;
+		right.replace(right.begin(), right.begin() + 1, "");
+
+		Productions.push_back({ newNonT, right + newNonT});
+	}
+	Productions.push_back({ Productions[indexProdToTerminal].first, Productions[indexProdToTerminal].second + newNonT });
+}
+
+bool Grammar::isTerminal(char symbol)
+{
+	if (symbol == m_lambda)
+	{
+		return true;
+	}
+
+	for (const auto& terminal : VTerminal)
+	{
+		if (symbol == terminal)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void Grammar::transformGrammarToFNG()
+{
+	//aplicare lema2
+
+	std::unordered_map<std::string, int> prodToTerminal;
+	std::unordered_map<char, char> prodTerminalToNonT;
+
+	for (int i = 0; i < Productions.size(); i++)
+	{
+		if (Productions[i].second.size() == 1 && isTerminal(Productions[i].second[0]))
+		{
+			prodToTerminal.insert({ Productions[i].first, i });
+			prodTerminalToNonT.insert({ Productions[i].second[0] , Productions[i].first[0] });
+		}
+
+		if (Productions[i].second[0] == Productions[i].first[0])
+		{
+			int indexProdToTerminal;
+			bool foundTerminal = false;
+			if (prodToTerminal.find(Productions[i].first) != prodToTerminal.end())
+			{
+				foundTerminal = true;
+			}
+
+			std::vector<int> indexProd;
+			indexProd.push_back(i);
+			for (int j = i + 1; j < Productions.size(); j++)
+			{
+				if (!foundTerminal && Productions[j].second.size() == 1 && isTerminal(Productions[j].second[0]))
+				{
+					prodToTerminal.insert({ Productions[j].first, j });
+					prodTerminalToNonT.insert({ Productions[j].second[0] , Productions[j].first[0] });
+					foundTerminal = true;
+				}
+
+				if (Productions[j].first == Productions[i].first &&
+					Productions[j].second[0] == Productions[j].first[0])
+				{
+					indexProd.push_back(j);
+				}
+			}
+
+			indexProdToTerminal = prodToTerminal[Productions[i].first];
+			lema2(indexProd, indexProdToTerminal);
+		}
+	}
+
+	//aplicare lema1
+	for (int i = 0; i < Productions.size(); i++)
+	{
+		auto& [left, right] = Productions[i];
+
+		for (int j = 1; j < right.size(); j++)
+		{
+			if (isTerminal(right[j]))
+			{
+				right[j] = prodTerminalToNonT[right[j]];
+			}
+		}
+		
+		if (!isTerminal(right[0]))
+		{
+			lema1(i, 0);
+			i--;
+		}
+	}
+
+}
+
 Grammar::~Grammar()
 {
 }
@@ -712,11 +862,4 @@ std::ostream& operator<<(std::ostream& out, const Grammar& gram)
 		out << '(' << i << ") " << P_left_member << " -> " << P_right_member << std::endl;
 	}
 	return out;
-}
-
-Grammar CreateFNG(Grammar& gram)
-{
-	Grammar FNG;
-
-	return FNG;
 }
