@@ -600,13 +600,12 @@ void Grammar::lema1(int indexProd, int indexNonT)
 
 	for (const auto& [prodLeft, prodRight] : Productions)
 	{
-		if (right[0] == Start && prodRight.size() == 1 && isTerminal(prodRight[0]))
-		{
-			continue;
-		}
-
 		if (prodLeft[0] == right[indexNonT])
 		{
+			if (prodRight[0] == m_lambda)
+			{
+				continue;
+			}
 			if (modified)
 			{
 				std::string aux = right;
