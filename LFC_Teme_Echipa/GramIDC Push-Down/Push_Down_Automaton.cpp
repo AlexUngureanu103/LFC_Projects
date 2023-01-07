@@ -2,12 +2,6 @@
 #include <queue>
 #include <stack>
 
-
-void Push_Down_Automaton::setQ(const std::vector<char>& State)
-{
-	this->m_State = State;
-}
-
 void Push_Down_Automaton::setEntryAlphabet(const std::vector<char>& alphabet)
 {
 	this->entry_alphabet = alphabet;
@@ -21,6 +15,11 @@ void Push_Down_Automaton::setInitialState(const char& state)
 void Push_Down_Automaton::setFinState(const std::vector<char>& state)
 {
 	this->Fin_state = state;
+}
+
+void Push_Down_Automaton::setStates(const std::vector<char>& states)
+{
+	this->m_States = states;
 }
 
 void Push_Down_Automaton::setTransition(const std::vector<std::tuple<char, char, char>>& transition)
@@ -85,7 +84,7 @@ bool Push_Down_Automaton::checkWord(std::string word)
 		int index = 0;
 		for (auto& st : transition)
 		{
-			if (std::get<0>(st) == curent_state && std::get<1>(st) == curent_word[0] 
+			if (std::get<0>(st) == curent_state && std::get<1>(st) == curent_word[0]
 				&& std::get<2>(st) == current_stackState[0])
 			{
 				std::string next_stackState;
@@ -97,8 +96,8 @@ bool Push_Down_Automaton::checkWord(std::string word)
 				{
 					next_stackState = current_stackState.replace(current_stackState.begin(), current_stackState.begin() + 1, std::get<1>(transitionResults[index]));
 				}
-				
-				que.push({ std::get<0>(transitionResults[index]), curent_word.substr(1), next_stackState});
+
+				que.push({ std::get<0>(transitionResults[index]), curent_word.substr(1), next_stackState });
 			}
 			index++;
 		}
@@ -109,7 +108,6 @@ bool Push_Down_Automaton::checkWord(std::string word)
 
 bool Push_Down_Automaton::isDeterministic()
 {
-
 	std::tuple<char, char, char> tuple1;
 	std::tuple<char, char, char> tuple2;
 	const auto& [first_state_0, alphabet_0, stack_state_0] = tuple1;
@@ -148,10 +146,10 @@ bool Push_Down_Automaton::isDeterministic()
 std::ostream& operator<<(std::ostream& out, Push_Down_Automaton& automat)
 {
 	out << "\nFinite Automat :\n" << "M = ({";
-	for (int i = 0; i < automat.m_State.size(); i++)
+	for (int i = 0; i < automat.m_States.size(); i++)
 	{
-		out << automat.m_State[i];
-		if (i < automat.m_State.size() - 1)
+		out << automat.m_States[i];
+		if (i < automat.m_States.size() - 1)
 		{
 			out << ", ";
 		}

@@ -130,9 +130,13 @@
   <ItemGroup>
     <ClCompile Include="GramIDC Push-Down.cpp" />
     <ClCompile Include="Grammar.cpp" />
+    <ClCompile Include="IDC_To_PushDown.cpp" />
+    <ClCompile Include="Push_Down_Automaton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grammar.h" />
+    <ClInclude Include="IDC_To_PushDown.h" />
+    <ClInclude Include="Push_Down_Automaton.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="IDC_Input.txt" />

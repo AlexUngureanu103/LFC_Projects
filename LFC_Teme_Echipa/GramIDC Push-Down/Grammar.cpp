@@ -333,7 +333,7 @@ bool Grammar::isIDC()
 	return true;
 }
 
-void Grammar::findAndDestroyProductions(const std::vector<char> &NewVNonterminal)
+void Grammar::findAndDestroyProductions(const std::vector<char>& NewVNonterminal)
 {
 	bool ok;
 	std::vector<char> excludedNonterminals;
@@ -360,20 +360,20 @@ void Grammar::findAndDestroyProductions(const std::vector<char> &NewVNonterminal
 	std::vector<std::pair<std::string, std::string>> NewVProductions;
 	std::ranges::for_each(Productions, [&excludedNonterminals, &NewVProductions, &ok](const auto& prod) {
 		const auto& [left, right] = prod;
-		ok = true;
-		for (const auto& vNonTBf : excludedNonterminals)
+	ok = true;
+	for (const auto& vNonTBf : excludedNonterminals)
+	{
+		if (right.find(vNonTBf) != right.npos || left.find(vNonTBf) != left.npos)
 		{
-			if (right.find(vNonTBf) != right.npos || left.find(vNonTBf) != left.npos)
-			{
-				ok = false;
-				break;
-			}
+			ok = false;
+			break;
 		}
+	}
 
-		if (ok)
-		{
-			NewVProductions.push_back(prod);
-		}
+	if (ok)
+	{
+		NewVProductions.push_back(prod);
+	}
 		});
 
 	Productions = NewVProductions;
@@ -482,7 +482,7 @@ void Grammar::simplifyGrammar()
 	}
 
 	NewVNonterminal.clear();
-	std::ranges::copy(NonTerminals ,std::back_inserter(NewVNonterminal));
+	std::ranges::copy(NonTerminals, std::back_inserter(NewVNonterminal));
 	findAndDestroyProductions(NewVNonterminal);
 
 	//eliminarea redenumirilor
@@ -531,7 +531,7 @@ void Grammar::simplifyGrammar()
 							}
 							for (int i = 0; i < prod.second.size(); i++)
 							{
-								if(prod.second[i] != right[0])
+								if (prod.second[i] != right[0])
 								{
 									newRight += prod.second[i];
 								}
@@ -565,26 +565,26 @@ void Grammar::simplifyGrammar()
 				}
 
 				Productions = NewProductions;
-			}	
+			}
 		}
 	}
 
 	VNonterminalBefore.clear();
 	std::ranges::for_each(VNonterminal, [&NewVNonterminal, &VNonterminalBefore, &ok](const auto& vNonT) {
 		ok = true;
-		for (const auto& excludedNonT : NewVNonterminal)
+	for (const auto& excludedNonT : NewVNonterminal)
+	{
+		if (excludedNonT == vNonT)
 		{
-			if (excludedNonT == vNonT)
-			{
-				ok = false;
-				break;
-			}
+			ok = false;
+			break;
 		}
+	}
 
-		if (ok)
-		{
-			VNonterminalBefore.push_back(vNonT);
-		}
+	if (ok)
+	{
+		VNonterminalBefore.push_back(vNonT);
+	}
 
 		});
 
@@ -611,7 +611,7 @@ void Grammar::lema1(int indexProd, int indexNonT)
 				std::string aux = right;
 				const auto beginIt = aux.begin() + indexNonT;
 				aux.replace(beginIt, beginIt + 1, prodRight);
-				newProductions.push_back({ left, aux});
+				newProductions.push_back({ left, aux });
 			}
 			else
 			{
@@ -648,7 +648,7 @@ void Grammar::lema2(std::vector<int> indexProd, int indexProdToTerminal)
 		left = newNonT;
 		right.replace(right.begin(), right.begin() + 1, "");
 
-		Productions.push_back({ newNonT, right + newNonT});
+		Productions.push_back({ newNonT, right + newNonT });
 	}
 	Productions.push_back({ Productions[indexProdToTerminal].first, Productions[indexProdToTerminal].second + newNonT });
 }
@@ -730,7 +730,7 @@ void Grammar::transformGrammarToFNG()
 				right[j] = prodTerminalToNonT[right[j]];
 			}
 		}
-		
+
 		if (!isTerminal(right[0]))
 		{
 			lema1(i, 0);

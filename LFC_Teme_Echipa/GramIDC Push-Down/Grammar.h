@@ -14,7 +14,7 @@ private:
 	char m_lambda;
 	std::vector<std::pair<std::string, std::string>> Productions;
 
-	void findAndDestroyProductions(const std::vector<char> &NewVNonterminal);
+	void findAndDestroyProductions(const std::vector<char>& NewVNonterminal);
 	void lema1(int indexProd, int indexNonT);
 	void lema2(std::vector<int>indexProd, int indexProdToTerminal);
 	bool isTerminal(char symbol);
@@ -28,7 +28,7 @@ public:
 	bool isRegular();
 	bool isIDC();
 	void simplifyGrammar();
-	
+
 	void transformGrammarToFNG();
 	~Grammar();
 
