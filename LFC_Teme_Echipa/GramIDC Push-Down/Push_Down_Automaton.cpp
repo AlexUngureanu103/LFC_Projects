@@ -65,27 +65,28 @@ bool Push_Down_Automaton::checkWord(std::string word)
 		return false;
 	}
 
-	std::stack<std::tuple<char, std::string, std::string>> que;
-	que.push({ initial_state, word, "" + initialStackState });
+	std::stack<std::tuple<char, std::string, std::string>> stack;
+	stack.push({ initial_state, word, std::string{initialStackState} });
 	std::cout << '\n';
 
-	while (!que.empty() && !word.empty())
+	while (!stack.empty())
 	{
-		std::tuple<char, std::string, std::string> current = que.top();
+		std::tuple<char, std::string, std::string> current = stack.top();
 		auto& [curent_state, curent_word, current_stackState] = current;
 		std::cout << '(' << curent_state << ',' << curent_word << ',' << current_stackState << ')' << " -> ";
 		if (curent_word.empty() && current_stackState.empty())
 		{
 			std::cout << "Valid";
 			return true;
-
 		}
-		que.pop();
+
+		stack.pop();
 		int index = 0;
+
 		for (auto& st : transition)
 		{
-			if (std::get<0>(st) == curent_state && std::get<1>(st) == curent_word[0]
-				&& std::get<2>(st) == current_stackState[0])
+			auto& [St_state, alph_ch, stack_state] = st;
+			if (St_state == curent_state && alph_ch == curent_word[0] && stack_state == current_stackState[0])
 			{
 				std::string next_stackState;
 				if (std::get<1>(transitionResults[index])[0] == m_lambda)
@@ -94,10 +95,11 @@ bool Push_Down_Automaton::checkWord(std::string word)
 				}
 				else
 				{
-					next_stackState = current_stackState.replace(current_stackState.begin(), current_stackState.begin() + 1, std::get<1>(transitionResults[index]));
+					std::string aux = current_stackState;
+					next_stackState = aux.replace(aux.begin(), aux.begin() + 1, std::get<1>(transitionResults[index]));
 				}
 
-				que.push({ std::get<0>(transitionResults[index]), curent_word.substr(1), next_stackState });
+				stack.push({ std::get<0>(transitionResults[index]), curent_word.substr(1), next_stackState });
 			}
 			index++;
 		}

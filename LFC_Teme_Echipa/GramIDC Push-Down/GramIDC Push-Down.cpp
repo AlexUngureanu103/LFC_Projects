@@ -29,7 +29,7 @@ void Menu()
 		while (!exit)
 		{
 			std::cout << "\nMenu options :\nx) Exit menu\na) Display grammar\nb) Generate N words from grammar\nc) Simplify grammar\nd) Get FNG grammar";
-			std::cout << "\ne)Generate and show PD automaton\nf)Check is the input word is accepted by the PD automaton";
+			std::cout << "\ne)Generate and show PD automaton\nf)Check is the input word is accepted by the PD automaton\ng)Get the lsit of the generated words\n";
 			char choice;
 			std::cout << "\nChoice : ";
 			if (std::cin >> choice)
@@ -102,10 +102,17 @@ void Menu()
 					std::string word;
 					std::cout << "\nInput word : ";
 					std::cin >> word;
-					std::cout << "\nWord accepted : " << PD_Automaton.checkWord(word);
+					if (PD_Automaton.checkWord(word) == true)
+					{
+						std::cout << "\nThe word " << word << " is accepted by the PD automaton\n";
+					}
+					else
+					{
+						std::cout << "\nThe word " << word << "  is not accepted by the PD automaton\n";
+					}
 					break;
 				}
-				case 6:
+				case 'g':
 				{
 					std::cout << "\nGenerated words : " << words.size() << '\n';
 					for (const auto& w : words)

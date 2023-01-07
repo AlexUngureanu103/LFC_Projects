@@ -6,14 +6,16 @@ Push_Down_Automaton TransformIDCGrammarToPushDownAutomaton(Grammar IDC_Grammar)
 		throw std::invalid_argument("Grammar is not IDC");
 	IDC_Grammar.simplifyGrammar();
 	IDC_Grammar.transformGrammarToFNG();
+	IDC_Grammar.simplifyGrammar();
 	Push_Down_Automaton PD_Automaton;
 	PD_Automaton.setEntryAlphabet(IDC_Grammar.getVTerminal());
-	PD_Automaton.setInitialState(IDC_Grammar.getStart());
+	PD_Automaton.setInitialState('F');
 	std::vector<char> fin_state{ 'F' };
 	PD_Automaton.setFinState(fin_state);
 	PD_Automaton.setLambda(IDC_Grammar.getLambda());
 	PD_Automaton.setStates(fin_state);
 	PD_Automaton.setStackStates(IDC_Grammar.getVNonterminal());
+	PD_Automaton.setInitialStackState(IDC_Grammar.getStart());
 
 	auto transitions = IDC_Grammar.getProductions();
 
@@ -30,7 +32,10 @@ Push_Down_Automaton TransformIDCGrammarToPushDownAutomaton(Grammar IDC_Grammar)
 		T_stackState = transition.first[0];
 		PD_transitions.push_back(PD_transition);
 		TR_state = T_state;
-		TR_result = std::string(transition.second.substr(1));
+		if (transition.second.size() == 1)
+			TR_result = IDC_Grammar.getLambda();
+		else
+			TR_result = transition.second.substr(1);
 		PD_transitionResults.push_back(PD_transitionResult);
 	}
 	PD_Automaton.setTransition(PD_transitions);
