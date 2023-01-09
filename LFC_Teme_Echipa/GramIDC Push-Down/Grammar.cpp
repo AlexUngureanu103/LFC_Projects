@@ -723,14 +723,6 @@ void Grammar::transformGrammarToFNG()
 	{
 		auto& [left, right] = Productions[i];
 
-		for (int j = 1; j < right.size(); j++)
-		{
-			if (isTerminal(right[j]))
-			{
-				right[j] = prodTerminalToNonT[right[j]];
-			}
-		}
-
 		if (!isTerminal(right[0]))
 		{
 			lema1(i, 0);

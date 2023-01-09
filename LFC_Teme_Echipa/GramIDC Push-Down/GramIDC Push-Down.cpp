@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include "IDC_To_PushDown.h"
+
 // Tema cu PUSH DOWN 
 void Menu()
 {
@@ -29,7 +30,7 @@ void Menu()
 		while (!exit)
 		{
 			std::cout << "\nMenu options :\nx) Exit menu\na) Display grammar\nb) Generate N words from grammar\nc) Simplify grammar\nd) Get FNG grammar";
-			std::cout << "\ne)Generate and show PD automaton\nf)Check is the input word is accepted by the PD automaton\ng)Get the lsit of the generated words\n";
+			std::cout << "\ne)Generate and show PD automaton\nf)Check is the input word is accepted by the PD automaton\ng)Get the lsit of the generated words\nh) generarea unui cuvant in G si verificarea daca e acceptat de automat\n";
 			char choice;
 			std::cout << "\nChoice : ";
 			if (std::cin >> choice)
@@ -121,6 +122,36 @@ void Menu()
 					}
 					break;
 				}
+				case 'h':
+				{
+					cnt = words.size();
+					int generations = 0;
+					for (int i = cnt; i < cnt + 1; generations++)
+					{
+						auto word = g.generateWord();
+						std::cout << "\n\n";
+						if (words.find(word) == words.end())
+						{
+							if (PD_Automaton.checkWord(word) == true)
+							{
+								std::cout << "\nThe word " << word << " is accepted by the PD automaton\n";
+							}
+							else
+							{
+								std::cout << "\nThe word " << word << "  is not accepted by the PD automaton\n";
+							}
+							words.insert(word);
+							i++;
+						}
+						if (generations > 501)
+						{
+							std::cout << "\nNo new word was  generated in 500+ tries\n";
+							break;
+						}
+					}
+					break;
+				}
+
 				default:
 					break;
 				}
