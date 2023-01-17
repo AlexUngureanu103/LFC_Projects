@@ -29,6 +29,7 @@ std::vector<char > CitireFormaPoloneza(std::string expresieRegulata)
 	expresieRegulata.push_back(' ');
 	uint16_t cntParantezeDeschise = 0;
 	uint16_t cntAlternantaNumarSemne = 0;
+	uint16_t cntStar = 0;
 	while (!expresieRegulata.empty())
 	{
 		if (expresieRegulata[0] == ' ' || expresieRegulata[0] == '	')
@@ -47,7 +48,6 @@ std::vector<char > CitireFormaPoloneza(std::string expresieRegulata)
 		{
 			ordineOperatori.push(expresieRegulata[0]);
 			cntParantezeDeschise++;
-			cntAlternantaNumarSemne++;
 			expresieRegulata.erase(0, 1);
 			continue;
 		}
@@ -71,7 +71,10 @@ std::vector<char > CitireFormaPoloneza(std::string expresieRegulata)
 		}
 		else if (expresieRegulata[0] == '.' || expresieRegulata[0] == '|' || expresieRegulata[0] == '*')
 		{
-			cntAlternantaNumarSemne--;
+			if (expresieRegulata[0] == '*')
+				cntStar++;
+			else
+				cntAlternantaNumarSemne--;
 			while (!ordineOperatori.empty() && prec(expresieRegulata[0]) <= prec(ordineOperatori.top()))
 			{
 				formaPoloneza.push_back(ordineOperatori.top());

@@ -145,11 +145,6 @@ AutomatLambdaTranzitii InchidereaKleene(const AutomatLambdaTranzitii& automate, 
 	newStates.push_back(q_state2);
 	newAutomatLambdaTransiti.setStates(newStates);
 
-	// transitions are every transition of the automate +
-	// the lambda transitions from q_state to the initial state of the automate  , with the lambda transitions +
-	// from the final state of the automate to q_state2 ,with lambda transitions +
-	// from q_state to q_state2 , with lambda transitions +
-	// from automate final state to automate initial state , with lambda transitions
 	std::vector<AutomatLambdaTranzitii::Transition> newTransitionVector;
 	newTransitionVector = automate.getTransition();
 	newTransitionVector.push_back({ q_state, newAutomatLambdaTransiti.getLambda(), automate.getInitialState() });
@@ -175,7 +170,7 @@ AutomatLambdaTranzitii OperatorOr(const AutomatLambdaTranzitii& firstAutomate, c
 	std::string newFinalState = q_state2;
 	newAutomatLambdaTransiti.setInitialState(newInitialState); // initial state is q_state
 	newAutomatLambdaTransiti.setFinState(newFinalState); // final state is q_state2
-	
+
 	std::vector< std::string> newStates; //states are the union of the two automates states and q_state and q_state2
 	newStates.reserve(firstAutomate.getStates().size() + secondAutomate.getStates().size() + 2);
 	newStates.push_back(q_state);
@@ -189,12 +184,7 @@ AutomatLambdaTranzitii OperatorOr(const AutomatLambdaTranzitii& firstAutomate, c
 	}
 	newStates.push_back(q_state2);
 	newAutomatLambdaTransiti.setStates(newStates);
-	
-	// transitions are every transition of the first automate and the second automate +
-	// the lambda transitions from q_state to the initial state of the first automate  , with the lambda transitions +
-	// from q_state to the initial state of the second automate  , with the lambda transitions +
-	// from the final state of the first automate to q_state2 ,with lambda transitions +
-	// from the final state of the second automate to q_state2 ,with lambda transitions
+
 	std::vector<AutomatLambdaTranzitii::Transition> newTransitionVector;
 	newTransitionVector = firstAutomate.getTransition();
 	for (const auto& transition : secondAutomate.getTransition())
@@ -214,6 +204,6 @@ AutomatLambdaTranzitii OperatorOr(const AutomatLambdaTranzitii& firstAutomate, c
 		newEntryAlphabet.insert(entry);
 	}
 	newAutomatLambdaTransiti.setEntryAlphabet(newEntryAlphabet);
-	
+
 	return newAutomatLambdaTransiti;
 }
