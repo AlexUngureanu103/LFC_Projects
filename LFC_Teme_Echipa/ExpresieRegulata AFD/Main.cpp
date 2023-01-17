@@ -18,14 +18,14 @@ void Meniu()
 {
 	std::string expresieRegulata;
 	std::ifstream inp{ "FormaPoloneza.txt" };
-	if (inp.is_open()) 
+	if (inp.is_open())
 	{
 		std::getline(inp, expresieRegulata);
 		inp.close();
 	}
 	else
 	{
-		throw std::exception {"Fisierul nu a putut fi deschis"};
+		throw std::exception{ "Fisierul nu a putut fi deschis" };
 	}
 
 	std::vector<char> FP = CitireFormaPoloneza(expresieRegulata);
@@ -48,14 +48,18 @@ void Meniu()
 		case 'b':
 		{
 			std::cout << std::endl;
-
-			std::ranges::for_each(expresieRegulata, [](const char ch) {
-				if (ch != '.')
-				{
-					std::cout << ch; 
+			char prev_char = '\0';
+			std::ranges::for_each(expresieRegulata, [&prev_char](const char ch) {
+				if (prev_char == ch && ch == '*') {
+					return;
 				}
+			prev_char = ch;
+			if (ch != '.')
+			{
+				std::cout << ch;
+			}
 				});
-			
+
 			std::cout << std::endl << std::endl;
 			break;
 		}
