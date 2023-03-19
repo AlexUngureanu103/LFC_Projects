@@ -29,6 +29,10 @@ void Meniu()
 	}
 
 	std::vector<char> FP = CitireFormaPoloneza(expresieRegulata);
+	for (auto& ch : FP)
+	{
+		std::cout << ch;
+	}
 	AutomatLambdaTranzitii AFNlambda = transformareFormaPolonezaInAutomatLambdaTranzitii(FP);
 	Deterministic_Finite_Automaton M = fromAFNLambdaToAFD(AFNlambda);
 
